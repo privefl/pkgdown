@@ -41,10 +41,27 @@
 #' pkgdown will check that all non-internal topics are included on
 #' this page, and will generate a warning if you have missed any.
 #'
+#' @section Figures:
+#'
+#' You can control the default rendering of figues by specifying the `figures`
+#' field in `_pkgdown.yml`. The default settings are equivalent to:
+#'
+#' ```
+#' figures:
+#'   dev: grDevices::png
+#'   dpi: 96
+#'   dev.args: []
+#'   fig.ext: png
+#'   fig.width: 7.2916667
+#'   fig.height: ~
+#'   fig.retina: 2
+#'   fig.asp: 1.618
+#' ```
+#'
 #' @section Icons:
 #' You can optionally supply an icon for each help topic. To do so, you'll
 #' need a top-level `icons` directory. This should contain {.png} files
-#' that are either 40x40 (for regular display) or 80x80 (if you want
+#' that are either 30x30 (for regular display) or 60x60 (if you want
 #' retina display). Icons are matched to topics by aliases.
 #'
 #' @inheritParams build_articles
@@ -107,7 +124,7 @@ build_reference <- function(pkg = ".",
     # Re-loading pkgdown while it's running causes weird behaviour with
     # the context cache
     if (!(pkg$package %in% c("pkgdown", "rprojroot"))) {
-      pkgload::load_all(pkg$src_path)
+      devtools::load_all(pkg$src_path)
     }
 
     old_dir <- setwd(path(pkg$dst_path, "reference"))
@@ -207,6 +224,7 @@ data_reference_topic <- function(topic,
 
   # File source
   out$source <- github_source_links(pkg$github_url, topic$source)
+  out$filename <- topic$file_in
 
   # Multiple top-level converted to string
   out$aliases <- purrr::map_chr(tags$tag_alias %||% list(), flatten_text)

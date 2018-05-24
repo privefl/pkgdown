@@ -42,7 +42,7 @@
 #'     href: http://hadley.nz
 #'   RStudio:
 #'     href: https://www.rstudio.com
-#'     html: <img src="http://tidyverse.org/rstudio-logo.svg" height="24" />
+#'     html: <img src="https://tidyverse.org/rstudio-logo.svg" height="24" />
 #' ```
 #'
 #' @section Development mode:
@@ -158,6 +158,26 @@
 #' explicitly mention new components in the `structure` they'll be added
 #' to the far right of the left menu.
 #'
+#' @section YAML config - search:
+#' You can use [docsearch](https://community.algolia.com/docsearch/) by algolia
+#' to add search to your site.
+#'
+#' ```
+#' template:
+#'   params:
+#'     docsearch:
+#'       api_key: API_KEY
+#'       index_name: INDEX_NAME
+#' ```
+#'
+#' You also need to add a `url:` field to `_pkgdown.yml` that specifies the
+#' location of your documentation on the web. For pkgdown, the URL field is:
+#'
+#' ```yaml
+#' url: http://pkgdown.r-lib.org
+#' ```
+#'
+#' See `vignette("pkgdown")` for details.
 #'
 #' @section YAML config - template:
 #' You can get complete control over the appearance of the site using the
@@ -229,7 +249,7 @@ build_site <- function(pkg = ".",
                        mathjax = TRUE,
                        lazy = FALSE,
                        override = list(),
-                       preview = interactive()
+                       preview = NA
                        ) {
 
   pkg <- section_init(pkg, depth = 0, override = override)

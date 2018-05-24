@@ -29,11 +29,16 @@ test_that("can link remote objects", {
 })
 
 test_that("links to home of re-exported functions", {
+  # can't easily access exports in 3.1
+  skip_if_not(getRversion() >= "3.2.0")
+
   scoped_package_context("pkgdown")
   expect_equal(href_expr_(addterm()), href_topic_remote("addterm", "MASS"))
 })
 
 test_that("fails gracely if can't find re-exported function", {
+  skip_if_not(getRversion() >= "3.2.0")
+
   scoped_package_context("pkgdown", c(foo = "reexports"))
   expect_equal(href_expr_(foo()), NA_character_)
 })
@@ -92,6 +97,11 @@ test_that("can link to remote articles", {
   )
 
   expect_equal(
+    href_expr_(vignette(package = "digest", "sha1")),
+     "https://cran.rstudio.com/web/packages/digest/vignettes/sha1.html"
+  )
+
+  expect_equal(
     href_expr_(vignette("highlight", "pkgdown")),
     "http://pkgdown.r-lib.org/articles/test/highlight.html"
   )
@@ -100,4 +110,24 @@ test_that("can link to remote articles", {
 test_that("or local sites, if registered", {
   scoped_package_context("pkgdown", local_packages = c("digest" = "digest"))
   expect_equal(href_expr_(vignette("sha1", "digest")), "digest/articles/sha1.html")
+})
+
+test_that("github_source returns (possibly many) URLs", {
+  base <- "https://github.com/r-lib/pkgdown"
+  expect_equal(
+    github_source(base, c("http://example.com", "R/example.R")),
+    c(
+      "http://example.com", # Already is a URL, so not modified
+      "https://github.com/r-lib/pkgdown/blob/master/R/example.R"
+    )
+  )
+})
+
+test_that("fail gracefully with non-working calls", {
+  scoped_package_context("test")
+
+  expect_equal(href_expr_(vignette()), NA_character_)
+  expect_equal(href_expr_(vignette(package = package)), NA_character_)
+  expect_equal(href_expr_(vignette(1, 2)), NA_character_)
+  expect_equal(href_expr_(vignette(, )), NA_character_)
 })

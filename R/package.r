@@ -46,6 +46,8 @@ as_pkgdown <- function(pkg = ".", override = list()) {
 
       desc = desc,
       meta = meta,
+      figures = meta_figures(meta),
+
       development = development,
       topics = package_topics(pkg, package),
       tutorials = package_tutorials(pkg, meta),
@@ -84,7 +86,11 @@ read_desc <- function(path = ".") {
 read_meta <- function(path) {
   path <- path_first_existing(
     path,
-    c("_pkgdown.yml", "pkgdown/_pkgdown.yml", "_pkgdown.yaml")
+    c("_pkgdown.yml",
+      "_pkgdown.yaml",
+      "pkgdown/_pkgdown.yml",
+      "inst/_pkgdown.yml"
+    )
   )
 
   if (is.null(path)) {
@@ -153,7 +159,7 @@ extract_title <- function(x) {
   x %>%
     purrr::detect(inherits, "tag_title") %>%
     flatten_text(auto_link = FALSE) %>%
-    trimws()
+    str_trim()
 }
 
 extract_source <- function(x) {

@@ -34,9 +34,26 @@ test_that("ifelse generates html", {
 
 test_that("tabular converted to html", {
   table <- "\\tabular{ll}{a \\tab b \\cr}"
-  expectation <- c("<table><tr><td>a </td>", "<td> b </td>", "</tr></table>")
+  expectation <- c("<table class='table'>", "<tr><td>a</td><td>b</td></tr>", "</table>")
   expect_equal(rd2html(table), expectation)
 })
+
+test_that("can omit trailing \\crs", {
+  table <- "\\tabular{l}{a \\cr b \\cr c}"
+  expectation <- c("<table class='table'>", "<tr><td>a</td></tr>", "<tr><td>b</td></tr>", "<tr><td>c</td></tr>", "</table>")
+  expect_equal(rd2html(table), expectation)
+
+  table <- "\\tabular{lll}{a \\tab b \\tab c}"
+  expectation <- c("<table class='table'>", "<tr><td>a</td><td>b</td><td>c</td></tr>", "</table>")
+  expect_equal(rd2html(table), expectation)
+})
+
+test_that("internal \\crs are stripped", {
+  table <- "\\tabular{l}{a \\cr b \\cr c \\cr}"
+  expectation <- c("<table class='table'>", "<tr><td>a</td></tr>", "<tr><td>b</td></tr>", "<tr><td>c</td></tr>", "</table>")
+  expect_equal(rd2html(table), expectation)
+})
+
 
 test_that("out is for raw html", {
   expect_equal(rd2html("\\out{<hr />}"), "<hr />")
@@ -50,6 +67,15 @@ test_that("code inside Sexpr is evaluated", {
   scoped_file_context()
 
   expect_equal(rd2html("\\Sexpr{1 + 2}"), "3")
+})
+
+test_that("can control \\Sexpr output", {
+  scoped_package_context("pkgdown")
+  scoped_file_context()
+
+  expect_equal(rd2html("\\Sexpr[results=hide]{1}"), character())
+  expect_equal(rd2html("\\Sexpr[results=text]{1}"), "1")
+  expect_equal(rd2html("\\Sexpr[results=rd]{\"\\\\\\emph{x}\"}"), "<em>x</em>")
 })
 
 test_that("Sexpr can contain multiple expressions", {
@@ -163,6 +189,10 @@ test_that("code blocks autolinked to vignettes", {
 })
 
 # Paragraphs --------------------------------------------------------------
+
+test_that("empty input gives empty output", {
+  expect_equal(flatten_para(character()), character())
+})
 
 test_that("empty lines break paragraphs", {
   expect_equal(

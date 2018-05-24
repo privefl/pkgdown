@@ -6,7 +6,7 @@
 \usage{
 build_site(pkg = ".", examples = TRUE, run_dont_run = FALSE,
   seed = 1014, mathjax = TRUE, lazy = FALSE, override = list(),
-  preview = interactive())
+  preview = NA)
 }
 \arguments{
 \item{pkg}{Path to package.}
@@ -175,6 +175,23 @@ This yaml would override the default "articles" component, eliminate
 the "home" component, and add a new "twitter" component. Unless you
 explicitly mention new components in the \code{structure} they'll be added
 to the far right of the left menu.
+}
+
+\section{YAML config - search}{
+
+You can use \href{https://community.algolia.com/docsearch/}{docsearch} by algolia
+to add search to your site.\preformatted{template:
+  params:
+    docsearch:
+      api_key: API_KEY
+      index_name: INDEX_NAME
+}
+
+You also need to add a \code{url:} field to \code{_pkgdown.yml} that specifies the
+location of your documentation on the web. For pkgdown, the URL field is:\preformatted{url: http://pkgdown.r-lib.org
+}
+
+See \code{vignette("pkgdown")} for details.
 }
 
 \section{YAML config - template}{

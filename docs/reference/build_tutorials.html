@@ -25,6 +25,14 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+<!-- docsearch -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
+
 <meta property="og:title" content="Build tutorials — build_tutorials" />
 
 <meta property="og:description" content="learnr tutorials must hosted be hosted elsewhere as they require an
@@ -60,7 +68,7 @@ list in _pkgdown.yml as described below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgdown</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">1.0.0.9000</span>
       </span>
     </div>
 
@@ -98,10 +106,16 @@ list in _pkgdown.yml as described below." />
       <a href="../articles/test/highlight.html">Test: Highlighting</a>
     </li>
     <li>
+      <a href="../articles/test/jss.pdf">Test: JSS article (PDF)</a>
+    </li>
+    <li>
       <a href="../articles/test/output.html">Test: Custom output</a>
     </li>
     <li>
       <a href="../articles/test/pdf.pdf">Test: PDF (PDF)</a>
+    </li>
+    <li>
+      <a href="../articles/test/widget.html">Test: Widgets</a>
     </li>
   </ul>
 </li>
@@ -112,12 +126,19 @@ list in _pkgdown.yml as described below." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hadley/pkgdown">
+  <a href="https://github.com/r-lib/pkgdown">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -125,13 +146,15 @@ list in _pkgdown.yml as described below." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Build tutorials</h1>
-    <small>Source: <a href='https://github.com/hadley/pkgdown/blob/master/R/build-tutorials.R'><code>R/build-tutorials.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/pkgdown/blob/master/R/build-tutorials.R'><code>R/build-tutorials.R</code></a></small>
+    <div class="hidden name"><code>build_tutorials.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>learnr tutorials must hosted be hosted elsewhere as they require an
 R execution engine. Currently, pkgdown will not build or publish tutorials
@@ -140,6 +163,7 @@ Tutorials are automatically discovered from published tutorials in
 <code>inst/tutorials</code> and <code>vignettes/tutorials</code>. Alternatively, you can
 list in <code>_pkgdown.yml</code> as described below.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>build_tutorials</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>override</span> <span class='kw'>=</span> <span class='fu'>list</span>(), <span class='kw'>preview</span> <span class='kw'>=</span> <span class='fl'>NA</span>)</pre>
     
@@ -195,7 +219,7 @@ section. This should be a list where each element specifies:</p><ul>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://www.rstudio.com'><img src='http://tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://hesselberthlab.org'>Jay Hesselberth</a>, <a href='https://www.rstudio.com'><img src='https://tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
 </div>
 
 <div class="pkgdown">
@@ -204,6 +228,25 @@ section. This should be a list where each element specifies:</p><ul>
 
       </footer>
    </div>
+
+  
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'fbd8d79ed49f21fc9ca7b2cf601a3f5b',
+    indexName: 'pkgdown',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

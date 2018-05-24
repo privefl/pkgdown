@@ -27,7 +27,13 @@ render_rmarkdown <- function(pkg, input, output, ..., copy_images = TRUE, quiet 
   path <- callr::r_safe(
     function(...) rmarkdown::render(...),
     args = args,
-    show = !quiet
+    show = !quiet,
+    env = c(
+      callr::rcmd_safe_env(),
+      BSTINPUTS = bst_paths(input_path),
+      TEXINPUTS = tex_paths(input_path),
+      BIBINPUTS = bib_paths(input_path)
+    )
   )
 
   if (identical(path_ext(path)[[1]], "html")) {
@@ -40,13 +46,39 @@ render_rmarkdown <- function(pkg, input, output, ..., copy_images = TRUE, quiet 
   # Copy over images needed by the document
   if (copy_images) {
     ext <- rmarkdown::find_external_resources(input_path, "UTF-8")
-    ext_path <- ext$path[ext$web]
-    file_copy(
-      path(path_dir(input_path), ext_path),
-      path(path_dir(output_path), ext_path),
-      overwrite = TRUE
-    )
+    ext_path <- ext$path[ext$web | ext$explicit]
+    src <- path(path_dir(input_path), ext_path)
+    dst <- path(path_dir(output_path), ext_path)
+    # Make sure destination paths exist before copying files there
+    dir_create(unique(path_dir(dst)))
+    file_copy(src, dst, overwrite = TRUE)
   }
 
   invisible(path)
+}
+
+# adapted from tools::texi2dvi
+bst_paths <- function(path) {
+  paths <- c(
+    Sys.getenv("BSTINPUTS"),
+    path_dir(path),
+    path(R.home("share"), "texmf", "bibtex", "bst")
+  )
+  paste(paths, collapse = .Platform$path.sep)
+}
+tex_paths <- function(path) {
+  paths <- c(
+    Sys.getenv("TEXINPUTS"),
+    path_dir(path),
+    path(R.home("share"), "texmf", "tex", "latex")
+  )
+  paste(paths, collapse = .Platform$path.sep)
+}
+bib_paths <- function(path) {
+  paths <- c(
+    Sys.getenv("BIBINPUTS"),
+    tex_paths(path)
+  )
+  paste(paths, collapse = .Platform$path.sep)
+
 }

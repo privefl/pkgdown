@@ -25,6 +25,14 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
+
+
+<!-- docsearch -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
+
 <meta property="og:title" content="Build reference section — build_reference" />
 
 <meta property="og:description" content="By default, pkgdown will generate an index that simply lists all
@@ -58,7 +66,7 @@ below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">pkgdown</a>
-        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">0.1.0.9000</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased package">1.0.0.9000</span>
       </span>
     </div>
 
@@ -96,10 +104,16 @@ below." />
       <a href="../articles/test/highlight.html">Test: Highlighting</a>
     </li>
     <li>
+      <a href="../articles/test/jss.pdf">Test: JSS article (PDF)</a>
+    </li>
+    <li>
       <a href="../articles/test/output.html">Test: Custom output</a>
     </li>
     <li>
       <a href="../articles/test/pdf.pdf">Test: PDF (PDF)</a>
+    </li>
+    <li>
+      <a href="../articles/test/widget.html">Test: Widgets</a>
     </li>
   </ul>
 </li>
@@ -110,12 +124,19 @@ below." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/hadley/pkgdown">
+  <a href="https://github.com/r-lib/pkgdown">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -123,19 +144,22 @@ below." />
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Build reference section</h1>
-    <small>Source: <a href='https://github.com/hadley/pkgdown/blob/master/R/build-reference.R'><code>R/build-reference.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/r-lib/pkgdown/blob/master/R/build-reference.R'><code>R/build-reference.R</code></a></small>
+    <div class="hidden name"><code>build_reference.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>By default, pkgdown will generate an index that simply lists all
 the functions in alphabetical order. To override this, provide a
 <code>reference</code> section in your <code>_pkgdown.yml</code> as described
 below.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>build_reference</span>(<span class='kw'>pkg</span> <span class='kw'>=</span> <span class='st'>"."</span>, <span class='kw'>lazy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>examples</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>run_dont_run</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>mathjax</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1014</span>, <span class='kw'>override</span> <span class='kw'>=</span> <span class='fu'>list</span>(),
@@ -216,12 +240,27 @@ roxygen2, but may be useful if you write Rd files by hand.</p>
 <p>pkgdown will check that all non-internal topics are included on
 this page, and will generate a warning if you have missed any.</p>
     
+    <h2 class="hasAnchor" id="figures"><a class="anchor" href="#figures"></a>Figures</h2>
+
+    
+    <p>You can control the default rendering of figues by specifying the <code>figures</code>
+field in <code>_pkgdown.yml</code>. The default settings are equivalent to:</p><pre>figures:
+  dev: grDevices::png
+  dpi: 96
+  dev.args: []
+  fig.ext: png
+  fig.width: 7.2916667
+  fig.height: ~
+  fig.retina: 2
+  fig.asp: 1.618
+</pre>
+    
     <h2 class="hasAnchor" id="icons"><a class="anchor" href="#icons"></a>Icons</h2>
 
     
     <p>You can optionally supply an icon for each help topic. To do so, you'll
 need a top-level <code>icons</code> directory. This should contain .png files
-that are either 40x40 (for regular display) or 80x80 (if you want
+that are either 30x30 (for regular display) or 60x60 (if you want
 retina display). Icons are matched to topics by aliases.</p>
     
 
@@ -261,6 +300,8 @@ retina display). Icons are matched to topics by aliases.</p>
       
       <li><a href="#yaml-config">YAML config</a></li>
 
+      <li><a href="#figures">Figures</a></li>
+
       <li><a href="#icons">Icons</a></li>
       
       <li><a href="#examples">Examples</a></li>
@@ -271,7 +312,7 @@ retina display). Icons are matched to topics by aliases.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://www.rstudio.com'><img src='http://tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
+  <p>Developed by <a href='http://hadley.nz'>Hadley Wickham</a>, <a href='https://hesselberthlab.org'>Jay Hesselberth</a>, <a href='https://www.rstudio.com'><img src='https://tidyverse.org/rstudio-logo.svg' alt='RStudio' height='24' /></a>.</p>
 </div>
 
 <div class="pkgdown">
@@ -280,6 +321,25 @@ retina display). Icons are matched to topics by aliases.</p>
 
       </footer>
    </div>
+
+  
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: 'fbd8d79ed49f21fc9ca7b2cf601a3f5b',
+    indexName: 'pkgdown',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

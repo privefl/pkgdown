@@ -3,7 +3,7 @@ $header-includes$
 $endfor$
 
 <div class="row">
-  <div class="col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>$title$</h1>
       $if(subtitle)$
@@ -28,7 +28,8 @@ $endfor$
       <h4 class="date">$date$</h4>
       $endif$
 
-      {{#source}}<small>{{{.}}}</small>{{/source}}
+      {{#source}}<small class="dont-index">{{{.}}}</small>{{/source}}
+      <div class="hidden name"><code>{{filename}}</code></div>
 
     </div>
 
@@ -43,9 +44,7 @@ $endfor$
     </div>
     $endif$
 
-<div class="contents">
 $body$
-</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
